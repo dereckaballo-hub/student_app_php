@@ -1,5 +1,6 @@
 <?php
     session_start();
+    include('db.php');
 
     if(isset($_SESSION['notification']))
     {
@@ -8,6 +9,8 @@
 
         $class = $type === 'error' ? 'alert-danger' : 'alert-success';
     }
+
+    $students = $pdo->query('SELECT * FROM students');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -62,7 +65,7 @@
         ?>
 
         <div class="card shadow rounded p-3 mt-2">
-            <table class="table align-middle table-hover">
+            <table class="table align-middle table-hover table-striped">
                 <thead>
                     <tr>
                         <th>#</th>
@@ -72,12 +75,17 @@
                     </tr>
                 </thead>
                 <tbody>
-                   <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                   </tr>
+                    <?php while($row = $students->fetch()): ?>
+                        <tr>
+                            <td><?= htmlspecialchars($row['id']) ?></td>
+                            <td><?= htmlspecialchars($row['nom']) ?></td>
+                            <td><?= htmlspecialchars($row['email']) ?></td>
+                            <td class="text-end">
+                                <a href="" class="btn btn-primary">Modifier</a>
+                                <a onclick="return confirmationDelete()" href="delete.php?id=<?= (int)$row['id'] ?>" class="btn btn-danger">Supprimer</a>
+                            </td>
+                        </tr>
+                    <?php endwhile; ?>
                 </tbody>
             </table>
         </div>
@@ -131,9 +139,11 @@
             }
         });
 
-        function confirmDeletion(){
-            return confirm("Êtes vous sûre de vouloir supprimer cet élément ?");
+        function confirmationDelete()
+        {
+            return confirm("Voulez-vous vraiment éffectuer cette action ?");
         }
+
     </script>
 </body>
 </html>
