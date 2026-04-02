@@ -9,7 +9,27 @@
 
         if(!empty($nom) && !empty($email))
         {
-            // Traitement d'insertion
+            try{
+                $sql = 'INSERT INTO students(nom, email) VALUES(:nom, :email)';
+                
+                $stmt = $pdo->prepare($sql);
+
+                $stmt->execute([
+                    ':nom' => $nom,
+                    ':email' => $email
+                ]);
+
+                $_SESSION['notification'] = [
+                    'type' => 'success',
+                    'message' => 'Étudiant enregistré avec succès'
+                ];
+
+                header("Location: index.php");
+                exit();
+
+            }catch(PDOException $e){
+                die("Erreur lors de l'enregistrement");
+            }
         }else{
             // Message champs vides
             $_SESSION['notification'] = [

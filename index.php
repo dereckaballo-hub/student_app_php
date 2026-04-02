@@ -56,7 +56,10 @@
             <div class="alert <?= $class ?>">
                 <?= htmlspecialchars($message) ?>
             </div>
-        <?php endif; ?>
+        <?php 
+            unset($_SESSION['notification']);
+            endif; 
+        ?>
 
         <div class="card shadow rounded p-3 mt-2">
             <table class="table align-middle table-hover">
