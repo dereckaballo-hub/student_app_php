@@ -81,7 +81,7 @@
                             <td><?= htmlspecialchars($row['nom']) ?></td>
                             <td><?= htmlspecialchars($row['email']) ?></td>
                             <td class="text-end">
-                                <a href="" class="btn btn-primary">Modifier</a>
+                                <a href="update.php?id=<?= (int)$row['id'] ?>" class="btn btn-primary">Modifier</a>
                                 <a onclick="return confirmationDelete()" href="delete.php?id=<?= (int)$row['id'] ?>" class="btn btn-danger">Supprimer</a>
                             </td>
                         </tr>
