@@ -13,6 +13,42 @@
             exit();
         }
 
+        if($_SERVER['REQUEST_METHOD'] === 'POST')
+        {
+            $nom = trim($_POST['nom']) ?? "";
+            $email = trim($_POST['email']) ?? "";
+
+            if(!empty($nom) && !empty($email))
+            {
+                // Traitement de la modification
+                try{
+
+                    $sql = "UPDATE students SET nom=:nom, email=:email WHERE id=:id";
+
+                    $stmt = $pdo->prepare($sql);
+
+                    $stmt->execute([
+                        ':nom' => $nom,
+                        ':email' => $email,
+                        ':id' => $id
+                    ]);
+
+                    $_SESSION['notification'] = [
+                        'type' => 'success',
+                        'message' => 'Etudiant modifié avec succès'
+                    ];
+
+                    header("Location: index.php");
+                    exit();
+
+                }catch(PDOException $e){
+                    die("Erreur serveur");
+                }
+            }else{
+                die("Champs vides");
+            }
+        }
+
         $sql = "SELECT * FROM students WHERE id=:id";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([
@@ -52,12 +88,12 @@
                 <h5>Modifier un étudiant</h5>
             </div>
             <div class="card-body">
-                <form action="">
+                <form action="" method="POST">
                     <div class="form-group mb-4">
                         <label for="nom">Nom</label>
                         <input type="text" value="<?= htmlspecialchars($student['nom']) ?>" name="nom" placeholder="Nom de l'étudiant" class="form-control">
                     </div>
-                    
+
                     <div class="form-group mb-4">
                         <label for="email">Email</label>
                         <input type="text" value="<?= htmlspecialchars($student['email']) ?>" name="email" placeholder="Email de l'étudiant" class="form-control">
